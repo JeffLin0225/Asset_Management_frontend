@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
-import axios from 'axios'
+import { login } from '../../api/loginApi'
 
 const pinDigits = ref(['', '', '', ''])
 const inputRefs = ref([]) as any
@@ -47,10 +47,11 @@ watch(pinDigits, async (val) => {
   if (val.every(d => d !== '')) {
     const pin = val.join('')
     try {
-      await axios.post('/api/login', { pin })
-      ElMessage.success('登入成功')
-    } catch {
-      ElMessage.error('PIN 碼錯誤')
+      const res = await login({ID:'cb67a8f12e' , pin:pin})
+      ElMessage.success(res.ID + '登入成功'+res.access_token  )
+    } catch(err:any) {
+      const msg = err.response?.data?.detail || 'PIN 碼錯誤'
+      ElMessage.error(msg)
       pinDigits.value = ['', '', '', '']
       nextTick(() => inputRefs.value[0]?.focus())
     }
