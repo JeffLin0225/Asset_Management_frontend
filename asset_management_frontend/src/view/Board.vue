@@ -31,44 +31,82 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref , watch , onMounted} from 'vue'
 import draggable from 'vuedraggable'
+import debounce from 'lodash.debounce'
 import Column from '../components/Column.vue'
 
-const columns = reactive([
-  { 
-    id: 'asset', 
-    title: '資產', 
-    subCategories: [
-      { 
-        id: 'cash', 
-        title: '現金', 
-        items: [
-          { id: 1, name: '錢包', amount: 5000, note: '日常現金' }
-        ] 
-      }
-    ] 
-  },
-  { 
-    id: 'liability', 
-    title: '負債', 
-    subCategories: [
-      { 
-        id: 'credit', 
-        title: '信用卡', 
-        items: [
-          { id: 2, name: '台新卡', amount: -2000, note: '水電費' }
-        ] 
-      }
-    ] 
-  },
-  { 
-    id: 'other', 
-    title: '其他', 
-    subCategories: [] 
-  }
-])
+const isSaving  = ref(false) // 儲存中
+const isSaved   = ref(true)  // 已儲存
+const columns = ref([])
 
+// 抖動
+const debouncedSave = debounce( async () => {
+  isSaving.value = true 
+  isSaved.value = false
+  await saveDate()
+  isSaving.value = false
+  isSaved.value = true
+} , 1000) // ＊＊＊ 抖動秒數 ＊＊＊
+
+// 儲存資料
+const saveDate = () => {
+  console.log('儲存去後端');
+}
+
+// 初始化資產資料
+const initData = () => {
+  columns.value = [
+    { id: 'asset', title: '資產', subCategories: [] },
+    { id: 'liability', title: '負債', subCategories: [] },
+    { id: 'other', title: '其他', subCategories: [] }
+  ]
+}
+
+onMounted(async () => {
+  initData()
+})
+
+watch(columns, () => {
+  debouncedSave()
+}, { deep: true })
+
+
+// const columns = reactive([
+//   { 
+//     id: 'asset', 
+//     title: '資產', 
+//     subCategories: [
+//       { 
+//         id: 'cash', 
+//         title: '現金', 
+//         items: [
+//           { id: 1, name: '錢包', amount: 5000, note: '日常現金' }
+//         ] 
+//       }
+//     ] 
+//   },
+//   { 
+//     id: 'liability', 
+//     title: '負債', 
+//     subCategories: [
+//       { 
+//         id: 'credit', 
+//         title: '信用卡', 
+//         items: [
+//           { id: 2, name: '台新卡', amount: -2000, note: '水電費' }
+//         ] 
+//       }
+//     ] 
+//   },
+//   { 
+//     id: 'other', 
+//     title: '其他', 
+//     subCategories: [] 
+//   }
+// ])
+
+// 正在輸入框 編輯中 才可以改變樣式
 const editingSubId = ref(null)
 
 const updateEditingSubId = (value) => {
@@ -76,30 +114,36 @@ const updateEditingSubId = (value) => {
 }
 
 const removeColumn = (id) => {
-  const idx = columns.findIndex(c => c.id === id)
-  if (idx !== -1) columns.splice(idx, 1)
+  const idx = columns.value.findIndex(c => c.id === id)
+  if (idx !== -1) columns.value.splice(idx, 1)
 }
 
+// ########## 小標題 ##########
+
 const addSubCategory = (columnId) => {
-  const col = columns.find(c => c.id === columnId)
+  const col = columns.value.find(c => c.id === columnId)
   if (col) {
     col.subCategories.push({ 
       id: Date.now().toString(), 
-      title: '新小標題', 
+      title: '請輸入小標題名稱', 
       items: [] 
     })
   }
 }
 
 const removeSubCategory = (columnId, subId) => {
-  const col = columns.find(c => c.id === columnId)
+  const col = columns.value.find(c => c.id === columnId)
   if (col) {
     col.subCategories = col.subCategories.filter(s => s.id !== subId)
   }
 }
 
+// ########## 小標題 [END] ########## 
+
+// ########## 卡片 ##########
+
 const addItem = (columnId, subId) => {
-  const col = columns.find(c => c.id === columnId)
+  const col = columns.value.find(c => c.id === columnId)
   const sub = col?.subCategories.find(s => s.id === subId)
   if (sub) {
     sub.items.push({ 
@@ -112,12 +156,15 @@ const addItem = (columnId, subId) => {
 }
 
 const removeItem = (columnId, subId, itemId) => {
-  const col = columns.find(c => c.id === columnId)
+  const col = columns.value.find(c => c.id === columnId)
   const sub = col?.subCategories.find(s => s.id === subId)
   if (sub) {
     sub.items = sub.items.filter(i => i.id !== itemId)
   }
 }
+
+// ########## 卡片 [END] ##########
+
 </script>
 
 <style scoped>

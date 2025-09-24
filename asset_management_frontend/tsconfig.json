@@ -5,7 +5,7 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "types": ["node"],
+    "skipLibCheck": true,
     "moduleResolution": "node",
     "module": "ESNext",
     "target": "ESNext"
