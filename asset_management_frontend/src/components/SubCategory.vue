@@ -30,7 +30,7 @@
     </button>
 
     <draggable
-      v-model="sub.items"
+      v-model="sub.cardList"
       group="items"
       item-key="id"
       class="items-container"
@@ -42,7 +42,7 @@
       :scroll-sensitivity="100"
       :scroll-speed="10"
     >
-      <template v-if="sub.items.length === 0">
+      <template v-if="sub.cardList.length === 0">
         <div class="empty-placeholder">
           <div class="empty-icon">💳</div>
           <p>拖拉卡片到這裡</p>

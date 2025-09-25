@@ -19,8 +19,8 @@
     </button>
 
     <draggable
-      v-model="column.subCategories"
-      group="subCategories"
+      v-model="column.subCategoryList"
+      group="subCategoryList"
       item-key="id"
       class="sub-categories-container"
       :animation="150"
@@ -31,7 +31,7 @@
       :scroll-sensitivity="100"
       :scroll-speed="15"
     >
-      <template v-if="column.subCategories.length === 0">
+      <template v-if="column.subCategoryList.length === 0">
         <div class="empty-placeholder">
           <div class="empty-icon">📋</div>
           <p>拖拉小標題到這裡</p>
