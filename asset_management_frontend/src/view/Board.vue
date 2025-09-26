@@ -46,6 +46,7 @@ import debounce from 'lodash.debounce'
 
 import Column from '../components/Column.vue'
 import type { Category, SubCategory, Card } from '../type/Asset'
+import { saveAsset } from '../api/assetApi'
 
 const isSaving = ref(false)
 const isSaved = ref(true)
@@ -53,8 +54,10 @@ const columns = ref<Category[]>([])
 
 // 儲存資料
 const saveDate = () => {
-  console.log('資料已更新:', JSON.parse(JSON.stringify(columns.value)))
-  console.log('正在儲存至後端...')}
+  // console.log('資料已更新:', JSON.parse(JSON.stringify(columns.value)))
+  console.log('正在儲存至後端...')
+  saveAsset(columns.value)
+}
 
 // 抖動
 const debouncedSave = debounce(async () => {
