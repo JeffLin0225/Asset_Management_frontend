@@ -1,10 +1,21 @@
+export interface AssetRequest {
+    userId :string;
+    asset :Category[];
+}
+
+export interface AssetResponse {
+    result:boolean
+    errorMessage :string
+}
+
+
 export interface Card {
-    id :string, 
-    name :string,
-    amount :number,
-    note :string,
-    order :number,
-    updatedTime : string
+    id :string;   
+    name :string;   
+    amount :number;   
+    note :string;   
+    order :number;   
+    updatedTime : string;   
 }
 
 export interface SubCategory {

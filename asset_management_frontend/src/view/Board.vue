@@ -43,6 +43,7 @@
 import { ref, watch, onMounted } from 'vue'
 import draggable from 'vuedraggable'
 import debounce from 'lodash.debounce'
+import { ElMessage } from 'element-plus'
 
 import Column from '../components/Column.vue'
 import type { Category, SubCategory, Card } from '../type/Asset'
@@ -53,23 +54,27 @@ const isSaved = ref(true)
 const columns = ref<Category[]>([]) 
 
 // 儲存資料
-const saveDate = () => {
+const saveDate :()=> Promise<boolean> = async()=>{
   // console.log('資料已更新:', JSON.parse(JSON.stringify(columns.value)))
   console.log('正在儲存至後端...')
-  saveAsset(columns.value)
+  const res = await saveAsset({userId:'', asset:columns.value})
+  if (!res.result){
+    ElMessage.error(res.errorMessage)
+  }
+  return res.result
 }
 
 // 抖動
 const debouncedSave = debounce(async () => {
   // 儲存後端
-  await saveDate() 
+  const isSavedSuccess = await saveDate() 
 
-  isSaving.value = false  
-  isSaved.value = true
+  isSaving.value = !isSavedSuccess  
+  isSaved.value = isSavedSuccess
   
   // 已儲存消失
   setTimeout(() => { 
-    isSaved.value = false
+    isSaved.value = !isSavedSuccess  
   }, 2000)
 
 }, 1000)
