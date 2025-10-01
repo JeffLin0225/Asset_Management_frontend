@@ -47,7 +47,7 @@ import { ElMessage } from 'element-plus'
 
 import Column from '../components/Column.vue'
 import type { Category, SubCategory, Card } from '../type/Asset'
-import { saveAsset } from '../api/assetApi'
+import { getAsset,saveAsset } from '../api/assetApi'
 
 const isSaving = ref(false)
 const isSaved = ref(true)
@@ -80,12 +80,18 @@ const debouncedSave = debounce(async () => {
 }, 1000)
 
 // 初始化資產資料
-const initData = () => {
-  columns.value = [
-    { id: 'asset', title: '資產', order: 1, updatedTime: new Date().toISOString(), subCategoryList: [] },
-    { id: 'liability', title: '負債', order: 2, updatedTime: new Date().toISOString(), subCategoryList: [] },
-    { id: 'other', title: '其他', order: 3, updatedTime: new Date().toISOString(), subCategoryList: [] }
-  ]
+const initData = async () => {
+  // columns.value = [
+  //   { id: 'asset', title: '資產', order: 1, updatedTime: new Date().toISOString(), subCategoryList: [] },
+  //   { id: 'liability', title: '負債', order: 2, updatedTime: new Date().toISOString(), subCategoryList: [] },
+  //   { id: 'other', title: '其他', order: 3, updatedTime: new Date().toISOString(), subCategoryList: [] }
+  // ]
+  const res = await getAsset('')
+  if (res){
+    columns.value = res
+  }else {
+    ElMessage.error('查詢資產失敗')
+  }
 }
 
 onMounted(() => {
