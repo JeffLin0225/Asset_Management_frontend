@@ -47,8 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import AssetOverview from '../components/AssetOverview.vue'
-import CategoryTrendChart from '../components/CategoryTrendChart.vue'
+import AssetOverview from '../components/AssetDashboard/AssetOverview.vue'
+import CategoryTrendChart from '../components/AssetDashboard/CategoryTrendChart.vue'
 import CategoryPie from '../components/AssetDashboard/CategoryPie.vue'
 import CategoryDetailPie from '../components/AssetDashboard/CategoryDetailPie.vue'
 import NetWorthTrendChart from '../components/AssetDashboard/NetWorthTrendChart.vue'

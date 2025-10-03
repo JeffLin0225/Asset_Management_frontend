@@ -45,7 +45,7 @@ import draggable from 'vuedraggable'
 import debounce from 'lodash.debounce'
 import { ElMessage } from 'element-plus'
 
-import Column from '../components/Column.vue'
+import Column from '../components/AssetDraggable/Column.vue'
 import type { Category, SubCategory, Card } from '../type/Asset'
 import { getAsset,saveAsset } from '../api/assetApi'
 

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 // 匯入頁面元件
-import Login from '../view/Auth/Login.vue'
+import Login from '../view/Login.vue'
 import AssetDraggable from '../view/AssetDraggable.vue'
 import AssetDashboard from '../view/AssetDashboard.vue'
 
