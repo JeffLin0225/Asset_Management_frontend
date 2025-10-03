@@ -57,7 +57,7 @@ const columns = ref<Category[]>([])
 const saveDate :()=> Promise<boolean> = async()=>{
   // console.log('資料已更新:', JSON.parse(JSON.stringify(columns.value)))
   console.log('正在儲存至後端...')
-  const res = await saveAsset({userId:'', asset:columns.value})
+  const res = await saveAsset({userId:'cb67a8f2-e56c-414e-b3e2-6c625446112e', asset:columns.value})
   if (!res.result){
     ElMessage.error(res.errorMessage)
   }
@@ -86,7 +86,7 @@ const initData = async () => {
   //   { id: 'liability', title: '負債', order: 2, updatedTime: new Date().toISOString(), subCategoryList: [] },
   //   { id: 'other', title: '其他', order: 3, updatedTime: new Date().toISOString(), subCategoryList: [] }
   // ]
-  const res = await getAsset('')
+  const res = await getAsset('cb67a8f2-e56c-414e-b3e2-6c625446112e')
   if (res){
     columns.value = res
   }else {
@@ -124,10 +124,10 @@ const addSubCategory = (categoryId: string) => {
       id: Date.now().toString(),
       title: '請輸入小標題名稱',
       order: col.subCategoryList.length + 1,
-      cardList: [],   // ✅ 符合型別
+      cardList: [],   
       updatedTime: new Date().toISOString()
     }
-    col.subCategoryList.push(newSub)   // ✅ 符合型別
+    col.subCategoryList.push(newSub)  
   }
 }
 

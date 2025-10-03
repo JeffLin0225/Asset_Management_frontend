@@ -62,7 +62,7 @@
 <script setup>
 import { ref, nextTick, watch } from 'vue'
 import draggable from 'vuedraggable'
-import CardItem from './CardItem.vue'
+import CardItem from './AssetDraggable/CardItem.vue'
 
 const props = defineProps({
   sub: {

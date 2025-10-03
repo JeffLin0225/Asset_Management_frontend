@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
-import { login } from '../../api/loginApi'
+import { login } from '../api/loginApi'
 
 const pinDigits = ref(['', '', '', ''])
 const inputRefs = ref([]) as any
