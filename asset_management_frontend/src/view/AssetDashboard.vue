@@ -2,7 +2,7 @@
   <div>
     <div>
     <!-- 資產總覽 -->
-    <AssetOverview :totals="latest.totals" />
+    <AssetOverview v-if="latest" :totals="latest.totals" />
 
     <div class="summary-row">
       <!-- 資產｜負債｜其他趨勢圖 -->
@@ -52,18 +52,34 @@ import CategoryTrendChart from '../components/AssetDashboard/CategoryTrendChart.
 import CategoryPie from '../components/AssetDashboard/CategoryPie.vue'
 import CategoryDetailPie from '../components/AssetDashboard/CategoryDetailPie.vue'
 import NetWorthTrendChart from '../components/AssetDashboard/NetWorthTrendChart.vue'
-
-import { ref  } from 'vue'
+import { getAnalyze } from '../api/analyzeApi'   // 這就是你剛剛寫的 API 呼叫函式
+import { ref , onMounted } from 'vue'
 
 // 模擬 10 筆快照資料
-import mockSnapshots from '../mock/snapshots.json'
+//import mockSnapshots from '../mock/snapshots.json'
+//const snapshots = ref(mockSnapshots) // 資料
+//const latest = snapshots.value[snapshots.value.length - 1] 
+//const drillCategory = ref<string|null>(null)
+//const selectedSnapshot = ref<typeof mockSnapshots[0] | null>(null) 
 
-const snapshots = ref(mockSnapshots) // 資料
-const latest = snapshots.value[snapshots.value.length - 1] 
-const drillCategory = ref<string|null>(null)
-const selectedSnapshot = ref<typeof mockSnapshots[0] | null>(null)
+const userId = ref<string>('cb67a8f2-e56c-414e-b3e2-6c625446112e')
+const snapshots = ref<any[]>([])
+const latest = ref<any | null>(null)
+const drillCategory = ref<string | null>(null) 
+const selectedSnapshot = ref<any | null>(null)
 
+onMounted(async () => {
+  await initData(userId.value)
+})
 
+const initData = async (userId:string) => {
+  const result = await getAnalyze(userId)
+  if (result) {
+    snapshots.value = result
+    latest.value = snapshots.value[snapshots.value.length - 1]  // 取最後一筆
+    selectedSnapshot.value = latest.value                       // 預設選最新
+  }
+}
 
 // 大標題（折線圖選擇） -> 3個 小標題圓餅圖
 function handleDayClick({ date, snapshot }: { date: string; snapshot: any }) {
