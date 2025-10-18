@@ -1,0 +1,11 @@
+# asset collection : userId
+db.asset.createIndex(
+  { userId: 1},
+  { unique: true, name: "Index_asset_userId_unique" }
+)
+
+# analyze collection : userId, date 
+db.analyze.createIndex(
+  { userId: 1, date: 1 },
+  { unique: true, name: "Index_analyze_userId_date_unique" }
+)

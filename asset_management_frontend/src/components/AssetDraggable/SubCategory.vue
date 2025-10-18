@@ -201,9 +201,9 @@ watch(() => props.editingSubId, async (newVal) => {
   transform: translateY(-1px);
 }
 
-.items-container {
+/* .items-container {
   min-height: 80px;
-}
+} */
 
 .sub-column .empty-placeholder {
   padding: 24px 16px;
