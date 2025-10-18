@@ -166,20 +166,21 @@ const removeItem = (categoryId: string, subId: string, itemId: string) => {
 
 <style scoped>
 .board {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  padding: 24px;
+  /* min-height: 100vh; */
+  /* background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); */
+  /* padding: 24px; */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
 .board-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  justify-content: center; /* 水平置中 */
   gap: 24px;
-  min-height: calc(100vh - 48px);
+  /* flex-wrap: wrap; 多的自動換行 */
   max-width: 1400px;
   margin: 0 auto;
 }
+
 
 :global(.drag-ghost) {
   opacity: 1 !important;

@@ -1,10 +1,11 @@
-<script setup lang="ts">
-</script>
 
 <template>
-<router-view />
+    <Sidebar />
 </template>
+<script setup lang="ts">
+import Sidebar from './view/Sidebar.vue'
 
+</script>
 <style scoped>
 .logo {
   height: 6em;

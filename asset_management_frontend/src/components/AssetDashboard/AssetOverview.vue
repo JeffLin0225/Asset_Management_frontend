@@ -21,6 +21,9 @@ defineProps({
 })
 </script>
 <style>
+.title {
+  color: rgb(67, 63, 63);
+}
 .asset {
   color: #4CAF50; /* 綠色 */
   font-weight: 600;
@@ -32,12 +35,12 @@ defineProps({
 }
 
 .net-positive {
-  color: #2196F3; /* 藍色 */
+  color: #FF9800;
   font-weight: 600;
 }
 
 .net-negative {
-  color: #FF9800; /* 橘色，代表負值 */
+  color: #f40808; /* 代表負值 */
   font-weight: 600;
 }
 

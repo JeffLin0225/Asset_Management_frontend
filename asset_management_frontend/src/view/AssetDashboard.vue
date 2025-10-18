@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div>
     <!-- 資產總覽 -->
-    <AssetOverview v-if="latest" :totals="latest.totals" />
-
+    <div class="title">
+      <AssetOverview v-if="latest" :totals="latest.totals" />
+    </div>
     <div class="summary-row">
       <!-- 資產｜負債｜其他趨勢圖 -->
       <CategoryTrendChart :snapshots="snapshots" @day-click="handleDayClick" />   
@@ -13,12 +13,14 @@
     </div>
 
     <!-- 細項 -->
-    <CategoryDetailPie
-      v-if="drillCategory && selectedSnapshot"
-      :items="getDrillItems()"
-      :title="`${drillCategory} 細項`"
-    />
-
+    <div class="pie-row">
+      <CategoryDetailPie
+        v-if="drillCategory && selectedSnapshot"
+        :items="getDrillItems()"
+        :title="`${drillCategory} 細項`"
+      />
+    </div>
+    
     <div class="pie-row">
       <CategoryPie
         v-if="selectedSnapshot"
@@ -41,8 +43,6 @@
         @navigate="handleNavigate"
       />
     </div>
-
-  </div>
   </div>
 </template>
 
@@ -108,10 +108,18 @@ function getDrillItems(): Record<string, number> {
 
 </script>
 <style scoped>
-
+.title{
+  background-color:bisque;
+  display: flex;
+  justify-content: center;
+  max-width: 50%;
+  padding: 0.5%;
+  margin: 0 auto; 
+  border-radius: 25px;
+}
 .pie-row {
   display: flex;
-  gap: 24px;
+  gap: 10px;
   justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
@@ -120,8 +128,8 @@ function getDrillItems(): Record<string, number> {
 
 .pie-row > * {
   /* 容器大小 */
-  flex: 1 1 400px;
-  max-width: 500px;
+  flex: 1 1 500px;
+  max-width: 700px;
   min-width: 300px;
   
   /* 卡片效果 */
