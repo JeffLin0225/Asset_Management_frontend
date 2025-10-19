@@ -1,9 +1,18 @@
 
 <template>
-    <Sidebar />
+  <div>
+    <Login v-if="isLoginPage" />
+    <Sidebar v-if="!isLoginPage" />
+    <!-- <router-view /> -->
+  </div>
 </template>
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 import Sidebar from './view/Sidebar.vue'
+import Login from './view/Login.vue'
+const route = useRoute()
+const isLoginPage = computed(() => route.path === '/login')
 
 </script>
 <style scoped>

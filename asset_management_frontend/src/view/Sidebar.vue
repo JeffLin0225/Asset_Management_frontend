@@ -29,7 +29,7 @@ const menuItems = [
 
 <style scoped>
 .layout {
-  background: #7e7878;
+  /* background: #7e7878; */
   color: #fff;
   min-height: 100vh;
   padding-top: 80px;
@@ -42,7 +42,7 @@ const menuItems = [
   left: 50%;
   transform: translateX(-50%);
   background: rgba(20, 20, 20, 0.9);
-  border: 1px solid #333;
+  border: 2px solid white;
   border-radius: 12px;
   padding: 8px 20px;
   display: flex;
@@ -53,7 +53,7 @@ const menuItems = [
 
 .nav-item {
   color: #ccc;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
   text-decoration: none;
   padding-bottom: 4px;
@@ -63,10 +63,13 @@ const menuItems = [
 
 .nav-item:hover {
   color: #fff;
+  border-bottom: 3px dashed #fff; /* 白色虛線 */
+  padding-bottom: 2px;            /* 保持文字與底線間距 */
 }
 
 .nav-item.active {
   color: #fff;
+  border-bottom: none;
 }
 
 .nav-item.active::after {
