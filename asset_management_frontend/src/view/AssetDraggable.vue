@@ -49,6 +49,7 @@ import Column from '../components/AssetDraggable/Column.vue'
 import type { Category, SubCategory, Card } from '../type/Asset'
 import { getAsset,saveAsset } from '../api/assetApi'
 
+const isInitialized = ref(false) // 初始化查詢（避免一開始無謂儲存）
 const isSaving = ref(false)
 const isSaved = ref(true)
 const columns = ref<Category[]>([]) 
@@ -94,11 +95,14 @@ const initData = async () => {
   }
 }
 
-onMounted(() => {
-  initData()
+onMounted(async () => {
+  await initData()
+  isInitialized.value = true
+  isSaved.value = false
 })
 
 watch(columns, () => {
+  if (!isInitialized.value) return
   isSaving.value = true
   isSaved.value = false
   debouncedSave()

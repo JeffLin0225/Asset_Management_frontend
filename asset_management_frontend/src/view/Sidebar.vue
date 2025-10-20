@@ -15,13 +15,18 @@
 
     <!-- 主內容 -->
     <main class="main-content">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition name="fade-slide" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </main>
   </div>
 </template>
 
 <script setup>
 const menuItems = [
+  { path: '/', label: '首頁' },
   { path: '/assetDashboard', label: '資產總覽' },
   { path: '/assetDraggable', label: '資產編輯' }
 ]
@@ -86,5 +91,19 @@ const menuItems = [
 /* 主內容 */
 .main-content {
   padding: 32px;
+}
+
+/* 過場動畫 */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.4s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 </style>

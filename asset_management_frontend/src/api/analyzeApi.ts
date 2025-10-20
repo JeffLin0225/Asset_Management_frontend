@@ -1,9 +1,11 @@
 import axiosApi from './axiosApi'
 import type { Category } from '../type/Asset'
-
+import { useLoadingStore } from '../store/loading_store'
 
 export async function getAnalyze(userId :string) : Promise<Category[] | null>{
+    const loading = useLoadingStore()
     try{
+        loading.show()
         const res = await axiosApi.get('/getAnalyze' , {params:{userId}})
         if ( res.status == 200 ){
             return res.data
@@ -14,6 +16,8 @@ export async function getAnalyze(userId :string) : Promise<Category[] | null>{
     }catch (e){
         console.log('查詢資料發生錯誤',e)
         return null
+    }finally{
+        loading.hide()
     }
 }
 
