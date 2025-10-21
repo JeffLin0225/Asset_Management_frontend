@@ -1,8 +1,11 @@
 
 <template>
   <div>
+    <transition name="fade">
     <Login v-if="isLoginPage" />
+    
     <Sidebar v-else />
+    </transition>
     <Loading />
   </div>
 </template>

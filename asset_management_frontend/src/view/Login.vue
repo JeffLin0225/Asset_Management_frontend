@@ -22,9 +22,11 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { login } from '../api/loginApi'
 
+const router = useRouter()
 const pinDigits = ref(['', '', '', ''])
 const inputRefs = ref([]) as any
 
@@ -47,10 +49,14 @@ watch(pinDigits, async (val) => {
   if (val.every(d => d !== '')) {
     const pin = val.join('')
     try {
-      const res = await login({ID:'cb67a8f12e' , pin:pin})
+
+      const res = await login({ID:'cb67a8f2-e56c-414e-b3e2-6c625446112e' , pin:pin})
       ElMessage.success(res.ID + '登入成功'+res.access_token  )
+
+      router.push('/') // 倒轉首頁
+
     } catch(err:any) {
-      const msg = err.response?.data?.detail || 'PIN 碼錯誤'
+      const msg = err.response?.data?.detail || '伺服器錯誤，請稍後再試'
       ElMessage.error(msg)
       pinDigits.value = ['', '', '', '']
       nextTick(() => inputRefs.value[0]?.focus())

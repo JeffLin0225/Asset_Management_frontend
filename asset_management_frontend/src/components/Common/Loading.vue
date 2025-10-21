@@ -36,12 +36,12 @@ const loading = useLoadingStore()
   width: 100%;
   height: 100%;
   border: 4px solid transparent;
-  border-top-color: #ccf5e1;
+  border-top-color: #d3f5e4;
   border-radius: 50%;
   animation: spin 1.2s linear infinite;
 }
 .loader span:nth-child(2) {
-  border-top-color: #273630;
+  border-top-color: #c9fae6;
   animation-delay: -0.6s;
 }
 @keyframes spin {
