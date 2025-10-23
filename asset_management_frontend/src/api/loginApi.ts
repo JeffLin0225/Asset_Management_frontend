@@ -16,5 +16,4 @@ export async function login(payload: LoginRequest): Promise<LoginResponse> {
     loading.hide()
   }
   
-  
 }

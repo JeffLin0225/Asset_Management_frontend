@@ -16,19 +16,59 @@
           ref="inputRefs"
         />
       </div>
+      <el-button class="guest-entry" plain @click="guestDialogVisible = true">
+        以訪客身分體驗
+      </el-button>
+
+    <!-- 訪客登入 Dialog -->
+    <el-dialog 
+      class="guest-card"
+      v-model="guestDialogVisible"
+      
+      width="400"
+    >
+      <div class="guest-content">
+        <h2>訪客體驗帳號</h2>
+        <p>(<strong>PIN碼 ：</strong>0000)</p>
+      </div>
+
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button class="guest-button" @click="guestDialogVisible = false">取消</el-button>
+          <el-button
+            class="guest-button" 
+            type="primary"
+            @click="fillGuestPin"
+          >
+            一鍵訪客登入！
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
+
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute , useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { login } from '../api/loginApi'
 
+const guestDialogVisible = ref(false)
+
 const router = useRouter()
-const pinDigits = ref(['', '', '', ''])
+const pinDigits = ref(['', '', '', '']) // pin碼：原始狀態
 const inputRefs = ref([]) as any
+const route = useRoute()
+const userId = ref<string>((route.query.ID as string) || 'admin')
+
+// 訪客登入
+const fillGuestPin = () => {
+  pinDigits.value = ['0','0','0','0']
+  guestDialogVisible.value = false
+}
 
 function onInput(index: number) {
   pinDigits.value[index] = pinDigits.value[index].replace(/\D/g, '')
@@ -45,14 +85,19 @@ function onBackspace(index: number) {
   }
 }
 
+// 監控使用者輸入
 watch(pinDigits, async (val) => {
   if (val.every(d => d !== '')) {
     const pin = val.join('')
     try {
+      console.log("ID:"+userId.value)
+      const res = await login({ID: userId.value , pin:pin})
+      localStorage.setItem('userID' , res.ID)
+      localStorage.setItem('userName' , res.name)
+      localStorage.setItem('access_token' , res.access_token)
 
-      const res = await login({ID:'cb67a8f2-e56c-414e-b3e2-6c625446112e' , pin:pin})
-      ElMessage.success(res.ID + '登入成功'+res.access_token  )
-
+      // 登入成功
+      ElMessage.success('登入成功')
       router.push('/') // 倒轉首頁
 
     } catch(err:any) {
@@ -75,13 +120,16 @@ watch(pinDigits, async (val) => {
 }
 
 .pin-card {
+  position: relative;            /* 讓按鈕的 absolute 以卡片為準 */
   width: 300px;
   text-align: center;
   padding: 20px;
+  padding-bottom: 68px;          /* 預留空間給右下角按鈕 */
   border-radius: 16px;
-  background-color: #1E1E1E; /* 卡片背景 */
-  border: 1px solid #2C2C2C; /* 暗灰邊框 */
+  background-color: #1E1E1E;
+  border: 1px solid #2C2C2C;
   box-shadow: 0 4px 40px rgba(231, 225, 225, 0.6);
+  overflow: visible;             /* 確保底部內容不被裁切 */
 }
 
 .title {
@@ -134,6 +182,49 @@ watch(pinDigits, async (val) => {
 .pin-box.filled :deep(.el-input__wrapper) {
   border-color: #FFFFFF;
   background-color: #333333;
+}
+
+/* 隱藏對話框 */
+.guest-entry {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  border-color: #060505;
+  background-color: #333333;
+}
+
+.guest-entry:hover {
+  color: #FFFFFF;
+  border-color: #f1e3e3;
+  background-color: #161414;
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+  /* width: 320px; */
+}
+.guest-card {
+  background-color: #222 !important;
+  color: #fff;
+}
+.guest-button {
+  color: #8e8080;
+  border-color: #060505;
+  background-color: #333333;
+}
+.guest-button:hover {
+  color: #FFFFFF;
+  border-color: #f1e3e3;
+  background-color: black;
+  /* width: 320px; */
+}
+.guest-content ul {
+  margin-top: 8px;
+  padding-left: 18px;
+}
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 </style>
