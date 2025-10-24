@@ -2,15 +2,65 @@
   <div class="layout">
     <!-- 懸浮選單 -->
     <nav class="floating-nav">
+      <!-- 首頁 -->
       <router-link
-        v-for="item in menuItems"
-        :key="item.path"
-        :to="item.path"
+        to="/"
         class="nav-item"
-        :class="{ active: $route.path === item.path }"
+        :class="{ active: $route.path === '/' }"
       >
-        {{ item.label }}
+        <Icon icon="mdi:home" class="nav-icon" />
+        <span>首頁</span>
       </router-link>
+
+      <!-- 資產總覽 -->
+      <router-link
+        to="/assetDashboard"
+        class="nav-item"
+        :class="{ active: $route.path === '/assetDashboard' }"
+      >
+        <Icon icon="mdi:chart-bar" class="nav-icon" />
+        <span>資產總覽</span>
+      </router-link>
+
+      <!-- 資產編輯 -->
+      <router-link
+        to="/assetDraggable"
+        class="nav-item"
+        :class="{ active: $route.path === '/assetDraggable' }"
+      >
+        <Icon icon="mdi:pencil" class="nav-icon" />
+        <span>資產編輯</span>
+      </router-link>
+
+      <!-- GitHub 外部連結 -->
+      <a
+        href="https://github.com/"
+        class="nav-item"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Icon icon="octicon:mark-github-16" class="nav-icon" />
+        <span>GitHub</span>
+      </a>
+
+      <!-- 使用者資訊 -->
+      <div class="nav-item" v-if="userName" @click="toggleMenu">
+        <Icon icon="octicon:feed-person-16" class="nav-icon" />
+        <span>&thinsp;{{ userName }}</span>
+
+        <!-- 下拉選單 -->
+        <div v-if="showMenu" class="dropdown">
+          <div class="dropdown-item" @click="doLogout">
+            <Icon icon="material-symbols:logout" class="nav-icon" />
+            <span>登出</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="nav-item" v-if="!userName" @click="doLogin">
+        <Icon icon="material-symbols:logout" class="nav-icon" />
+        <span>登入</span>
+      </div>
     </nav>
 
     <!-- 主內容 -->
@@ -25,11 +75,43 @@
 </template>
 
 <script setup>
-const menuItems = [
-  { path: '/', label: '首頁' },
-  { path: '/assetDashboard', label: '資產總覽' },
-  { path: '/assetDraggable', label: '資產編輯' }
-]
+import { onMounted ,ref} from 'vue';
+import { Icon } from '@iconify/vue'
+import { useRouter } from 'vue-router'
+import { login } from '../api/loginApi';
+
+const router = useRouter()
+const userName = ref('')
+const showMenu = ref(false)
+
+onMounted(()=>{
+  userName.value = localStorage.getItem('userName')
+})
+
+const doLogin = () => {
+  // 清掉 session/localStorage
+  
+  router.push('/login')
+  // 如果需要，也可以加上 
+}
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value
+}
+
+const doLogout = () => {
+  localStorage.removeItem('userName')
+  localStorage.removeItem('access_token')
+  userName.value = ''
+  showMenu.value = false
+  
+  if (router.currentRoute.value.path === '/') {
+    // 已經在首頁 → 強制刷新
+    window.location.reload()
+  } else {
+    // 不是首頁 → 導去首頁
+    router.push('/')
+  }
+}
 </script>
 
 <style scoped>
@@ -57,6 +139,9 @@ const menuItems = [
 }
 
 .nav-item {
+  display: flex;              /* 讓 icon + 文字水平對齊 */
+  align-items: center;        /* 垂直置中 */
+  gap: 6px;                   /* icon 與文字間距 */
   color: #ccc;
   font-size: 18px;
   font-weight: 500;
@@ -88,6 +173,12 @@ const menuItems = [
   border-radius: 1px;
 }
 
+.nav-icon {
+  font-size: 20px;            
+  color: #fff;            
+  flex-shrink: 0;     
+}
+
 /* 主內容 */
 .main-content {
   padding: 32px;
@@ -105,5 +196,33 @@ const menuItems = [
 .fade-slide-leave-to {
   opacity: 0;
   transform: translateY(-10px);
+}
+
+/* 登出畫面 */
+.dropdown {
+  position: absolute;
+  top: 120%;
+  left: 0;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 6px 12px;
+  z-index: 2000;
+  min-width: 100px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.dropdown-item:hover {
+  color: #ff6b6b;
+  border-bottom: 3px dashed #ff6b6b; /* 白色虛線 */
+  padding-bottom: 2px;            /* 保持文字與底線間距 */
 }
 </style>

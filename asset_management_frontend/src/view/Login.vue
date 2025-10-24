@@ -65,6 +65,7 @@ const userId = ref(localStorage.getItem('userID') || '06b06c76-0df1-4b6a-af38-89
 
 // 訪客登入
 const fillGuestPin = () => {
+  userId.value = '06b06c76-0df1-4b6a-af38-89784ab24e66'
   pinDigits.value = ['0','0','0','0']
   guestDialogVisible.value = false
 }

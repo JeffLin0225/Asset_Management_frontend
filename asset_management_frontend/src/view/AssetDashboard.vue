@@ -62,7 +62,7 @@ import { ref , onMounted } from 'vue'
 //const drillCategory = ref<string|null>(null)
 //const selectedSnapshot = ref<typeof mockSnapshots[0] | null>(null) 
 
-const userId = ref<string>('cb67a8f2-e56c-414e-b3e2-6c625446112e')
+const userId = ref(localStorage.getItem('userID')||'')
 const snapshots = ref<any[]>([])
 const latest = ref<any | null>(null)
 const drillCategory = ref<string | null>(null) 
