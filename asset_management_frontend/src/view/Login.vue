@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
-import { useRoute , useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { login } from '../api/loginApi'
 
@@ -61,8 +61,7 @@ const guestDialogVisible = ref(false)
 const router = useRouter()
 const pinDigits = ref(['', '', '', '']) // pin碼：原始狀態
 const inputRefs = ref([]) as any
-const route = useRoute()
-const userId = ref<string>((route.query.ID as string) || 'admin')
+const userId = ref(localStorage.getItem('userID') || '06b06c76-0df1-4b6a-af38-89784ab24e66')
 
 // 訪客登入
 const fillGuestPin = () => {
