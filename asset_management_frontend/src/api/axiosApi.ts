@@ -18,9 +18,13 @@ axiosApi.interceptors.request.use(config => {
 axiosApi.interceptors.response.use(
   res => res,
   err => {
-    if (err.response?.status === 403) {
-      ElMessage.success('未授權，請重新登入');
-    }
+    if (err.response?.status === 401) {
+      ElMessage.warning('登入已過期，請重新登入');
+      localStorage.removeItem('access_token');
+      setTimeout(() => {
+      window.location.href = '/login'
+        }, 1000) // 延遲 1 秒再跳轉
+      }
     return Promise.reject(err);
   }
 );

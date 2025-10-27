@@ -19,7 +19,7 @@ const router = createRouter({
 })
 
 // 加入全域導航守衛
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
   const token = localStorage.getItem('access_token')
   if (to.meta.requiresAuth && !token) {
     ElMessage.warning('請先登入')

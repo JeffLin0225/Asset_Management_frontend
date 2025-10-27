@@ -74,25 +74,22 @@
   </div>
 </template>
 
-<script setup>
+<script setup  lang="ts">
 import { onMounted ,ref} from 'vue';
 import { Icon } from '@iconify/vue'
 import { useRouter } from 'vue-router'
-import { login } from '../api/loginApi';
 
 const router = useRouter()
+
 const userName = ref('')
 const showMenu = ref(false)
 
 onMounted(()=>{
-  userName.value = localStorage.getItem('userName')
+  userName.value = localStorage.getItem('userName')|| '訪客'
 })
 
 const doLogin = () => {
-  // 清掉 session/localStorage
-  
   router.push('/login')
-  // 如果需要，也可以加上 
 }
 const toggleMenu = () => {
   showMenu.value = !showMenu.value
