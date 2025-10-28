@@ -11,36 +11,50 @@
         <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
       </svg>
     </div>
+    <div>
 
-    <!-- 拖移 -->
-    <draggable
-      v-model="columns"
-      group="columns"
-      item-key="id"
-      class="board-container"
-      :animation="200"
-      :ghost-class="'drag-ghost'"
-      :chosen-class="'drag-chosen'"
-      :drag-class="'drag-active'"
-    >
-      <template #item="{ element: col }">
-        <Column
-          :column="col"
-          :editing-sub-id="editingSubId"
-          @remove-column="removeColumn"
-          @add-sub="addSubCategory"
-          @remove-sub="removeSubCategory"
-          @add-item="addItem"
-          @remove-item="removeItem"
-          @update:editing-sub-id="updateEditingSubId"
-        />
-      </template>
-    </draggable>
-  </div>
+    <!-- 匯總  -->
+    <div class="summary">
+      <div class="grand-total">
+        <strong>總匯總：{{ grandTotal.toLocaleString() }}</strong>
+      </div>
+      <div class="asset">資產總額：{{ assetTotal.toLocaleString() }}</div>
+      <div class="liability">負債總額：{{ liabilityTotal.toLocaleString() }}</div>
+      <div class="other">其他總額：{{ otherTotal.toLocaleString() }}</div>
+    </div>
+    <hr class="summary-divider" />
+    
+    <!-- 拖曳區 -->
+    </div>
+        <!-- 拖移 -->
+        <draggable
+          v-model="columns"
+          group="columns"
+          item-key="id"
+          class="board-container"
+          :animation="200"
+          :ghost-class="'drag-ghost'"
+          :chosen-class="'drag-chosen'"
+          :drag-class="'drag-active'"
+        >
+          <template #item="{ element: col }">
+            <Column
+              :column="col"
+              :editing-sub-id="editingSubId"
+              @remove-column="removeColumn"
+              @add-sub="addSubCategory"
+              @remove-sub="removeSubCategory"
+              @add-item="addItem"
+              @remove-item="removeItem"
+              @update:editing-sub-id="updateEditingSubId"
+            />
+          </template>
+        </draggable>
+      </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import draggable from 'vuedraggable'
 import debounce from 'lodash.debounce'
 import { ElMessage } from 'element-plus'
@@ -167,9 +181,77 @@ const removeItem = (categoryId: string, subId: string, itemId: string) => {
     sub.cardList = sub.cardList.filter(i => i.id !== itemId)
   }
 }
+
+
+const assetTotal = computed(() => {
+  const col = columns.value.find(c => c.id === 'asset')
+  if (!col) return 0
+  return col.subCategoryList.reduce((sum, sub) => {
+    return sum + sub.cardList.reduce((s, card) => s + (card.amount || 0), 0)
+  }, 0)
+})
+
+const liabilityTotal = computed(() => {
+  const col = columns.value.find(c => c.id === 'liability')
+  if (!col) return 0
+  return col.subCategoryList.reduce((sum, sub) => {
+    return sum + sub.cardList.reduce((s, card) => s + (card.amount || 0), 0)
+  }, 0)
+})
+
+const otherTotal = computed(() => {
+  const col = columns.value.find(c => c.id === 'other')
+  if (!col) return 0
+  return col.subCategoryList.reduce((sum, sub) => {
+    return sum + sub.cardList.reduce((s, card) => s + (card.amount || 0), 0)
+  }, 0)
+})
+
+const grandTotal = computed(() => {
+  return assetTotal.value - liabilityTotal.value
+})
+
 </script>
 
 <style scoped>
+.summary {
+  display: flex;
+  justify-content: center;   /* 讓整排內容置中，而不是貼左 */
+  align-items: center;
+  gap: 32px;                 /* 每個數值間距 */
+  margin: 8px auto 4px auto; /* 上下間距縮小，並自動水平置中 */
+  padding: 6px 12px;
+  max-width: 900px;          /* 限制寬度，避免太散 */
+}
+
+.summary .asset {
+  color: #4caf50; /* 綠色 */
+  font-weight: 600;
+}
+
+.summary .liability {
+  color: #f44336; /* 紅色 */
+  font-weight: 600;
+}
+
+.summary .other {
+  color: #9e9e9e; /* 灰色 */
+  font-weight: 600;
+}
+
+.summary .grand-total {
+  color: #ffd700; /* 金色 */
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.summary-divider {
+  margin: 2px auto 8px auto; /* hr 也置中，並縮小上下距離 */
+  width: 90%;                /* hr 不要全寬，跟 summary 對齊 */
+}
+
+
+
 .board {
   /* min-height: 100vh; */
   /* background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); */
