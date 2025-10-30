@@ -32,15 +32,26 @@
         <span>資產管理</span>
       </router-link>
 
-      <!-- GitHub 外部連結 -->
+      <!-- GitHub 前端外部連結 -->
       <a
-        href="https://github.com/"
+        href="https://github.com/JeffLin0225/Asset_Management_frontend"
         class="nav-item"
         target="_blank"
         rel="noopener noreferrer"
       >
         <Icon icon="octicon:mark-github-16" class="nav-icon" />
-        <span>GitHub</span>
+        <span>GitHub(前)</span>
+      </a>
+
+      <!-- GitHub 後端外部連結 -->
+      <a
+        href="https://github.com/JeffLin0225/Asset_Management_backend"
+        class="nav-item"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Icon icon="octicon:mark-github-16" class="nav-icon" />
+        <span>GitHub(後)</span>
       </a>
 
       <!-- 使用者資訊 -->
