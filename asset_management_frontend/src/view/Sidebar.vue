@@ -22,14 +22,14 @@
         <span>資產總覽</span>
       </router-link>
 
-      <!-- 資產編輯 -->
+      <!-- 資產管理 -->
       <router-link
         to="/assetDraggable"
         class="nav-item"
         :class="{ active: $route.path === '/assetDraggable' }"
       >
         <Icon icon="mdi:pencil" class="nav-icon" />
-        <span>資產編輯</span>
+        <span>資產管理</span>
       </router-link>
 
       <!-- GitHub 外部連結 -->
