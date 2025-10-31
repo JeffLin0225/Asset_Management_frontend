@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const props = defineProps<{
+const { items } = defineProps<{
   items: { id: number; title: string; preview: string; video: string }[]
 }>()
 

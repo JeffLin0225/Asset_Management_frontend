@@ -8,6 +8,8 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "module": "ESNext",
-    "target": "ESNext"
+    "target": "ESNext",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   }
 }
