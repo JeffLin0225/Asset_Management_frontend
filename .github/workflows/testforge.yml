@@ -10,6 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: JeffLin0225/testforge@v1
+      - uses: JeffLin0225/TestForge@v1
         with:
           project-path: './'
